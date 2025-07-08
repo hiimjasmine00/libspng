@@ -45,7 +45,7 @@
     #elif defined(__aarch64__) || defined(_M_ARM64) /* || defined(__ARM_NEON) */
         #define SPNG_ARM /* NOTE: only arm64 builds are tested! */
     #else
-        #pragma message "disabling SIMD optimizations for unknown target"
+        //#pragma message "disabling SIMD optimizations for unknown target"
         #define SPNG_DISABLE_OPT
     #endif
 
@@ -1209,7 +1209,7 @@ static int spng__inflate_init(spng_ctx *ctx, int window_bits)
     if(inflateValidate(&ctx->zstream, validate)) return SPNG_EZLIB_INIT;
 
 #else /* This requires zlib >= 1.2.11 */
-    #pragma message ("inflateValidate() not available, SPNG_CTX_IGNORE_ADLER32 will be ignored")
+    //#pragma message ("inflateValidate() not available, SPNG_CTX_IGNORE_ADLER32 will be ignored")
 #endif
 
     return 0;
