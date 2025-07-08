@@ -47,7 +47,6 @@ if(SPNG_STATIC)
     list(APPEND spng_TARGETS spng_static)
 endif()
 
-find_package(ZLIB REQUIRED)
 foreach(spng_TARGET ${spng_TARGETS})
     target_include_directories(${spng_TARGET} PUBLIC
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/spng>
