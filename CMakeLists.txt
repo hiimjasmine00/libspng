@@ -9,7 +9,7 @@ set(SPNG_MINOR 7)
 set(SPNG_REVISION 4)
 set(SPNG_VERSION ${SPNG_MAJOR}.${SPNG_MINOR}.${SPNG_REVISION})
 
-option(ENABLE_OPT "Enable architecture-specific optimizations" NOT ANDROID OR NOT ANDROID_ABI STREQUAL "armeabi-v7a")
+option(ENABLE_OPT "Enable architecture-specific optimizations" ON)
 option(SPNG_SHARED "Build shared lib" OFF)
 option(SPNG_STATIC "Build static lib" ON)
 option(BUILD_EXAMPLES "Build examples" OFF)
