@@ -9,10 +9,10 @@ set(SPNG_MINOR 7)
 set(SPNG_REVISION 4)
 set(SPNG_VERSION ${SPNG_MAJOR}.${SPNG_MINOR}.${SPNG_REVISION})
 
-option(ENABLE_OPT "Enable architecture-specific optimizations" ON)
-option(SPNG_SHARED "Build shared lib" ON)
+option(ENABLE_OPT "Enable architecture-specific optimizations" NOT ANDROID OR NOT ANDROID_ABI STREQUAL "armeabi-v7a")
+option(SPNG_SHARED "Build shared lib" OFF)
 option(SPNG_STATIC "Build static lib" ON)
-option(BUILD_EXAMPLES "Build examples" ON)
+option(BUILD_EXAMPLES "Build examples" OFF)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -53,7 +53,6 @@ foreach(spng_TARGET ${spng_TARGETS})
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/spng>
       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
-    target_link_libraries(${spng_TARGET} PRIVATE ZLIB::ZLIB)
     target_link_libraries(${spng_TARGET} PRIVATE ${MATH_LIBRARY})
 endforeach()
 
