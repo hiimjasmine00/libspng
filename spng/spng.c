@@ -15,11 +15,7 @@
     #define SPNG_DISABLE_OPT
     #include "tests/framac_stubs.h"
 #else
-    #ifdef SPNG_USE_MINIZ
-        #include <miniz.h>
-    #else
-        #include <zlib.h>
-    #endif
+    #include <miniz.h>
 #endif
 
 #ifdef SPNG_MULTITHREADING
@@ -415,11 +411,7 @@ static inline void spng__free(spng_ctx *ctx, void *ptr)
     ctx->alloc.free_fn(ptr);
 }
 
-#if defined(SPNG_USE_MINIZ)
 static void *spng__zalloc(void *opaque, size_t items, size_t size)
-#else
-static void *spng__zalloc(void *opaque, uInt items, uInt size)
-#endif
 {
     spng_ctx *ctx = opaque;
 
@@ -1190,27 +1182,6 @@ static int spng__inflate_init(spng_ctx *ctx, int window_bits)
     ctx->zstream.opaque = ctx;
 
     if(inflateInit2(&ctx->zstream, window_bits) != Z_OK) return SPNG_EZLIB_INIT;
-
-#if ZLIB_VERNUM >= 0x1290 && !defined(SPNG_USE_MINIZ)
-
-    int validate = 1;
-
-    if(ctx->flags & SPNG_CTX_IGNORE_ADLER32) validate = 0;
-
-    if(is_critical_chunk(&ctx->current_chunk))
-    {
-        if(ctx->crc_action_critical == SPNG_CRC_USE) validate = 0;
-    }
-    else /* ancillary */
-    {
-        if(ctx->crc_action_ancillary == SPNG_CRC_USE) validate = 0;
-    }
-
-    if(inflateValidate(&ctx->zstream, validate)) return SPNG_EZLIB_INIT;
-
-#else /* This requires zlib >= 1.2.11 */
-    //#pragma message ("inflateValidate() not available, SPNG_CTX_IGNORE_ADLER32 will be ignored")
-#endif
 
     return 0;
 }
