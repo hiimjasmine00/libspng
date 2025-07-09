@@ -17,7 +17,7 @@ option(BUILD_EXAMPLES "Build examples" OFF)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-if(NOT CMAKE_HOST_WIN32)
+if(NOT WIN32)
     set(MATH_LIBRARY "m")
 else()
     set(MATH_LIBRARY "")
