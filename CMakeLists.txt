@@ -54,3 +54,53 @@ foreach(spng_TARGET ${spng_TARGETS})
     )
     target_link_libraries(${spng_TARGET} PRIVATE ${MATH_LIBRARY})
 endforeach()
+
+set(project_config "${CMAKE_CURRENT_BINARY_DIR}/SPNGConfig.cmake")
+set(project_version_config "${CMAKE_CURRENT_BINARY_DIR}/SPNGConfigVersion.cmake")
+set(targets_export_name SPNGTargets)
+set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/spng")
+
+configure_package_config_file(cmake/Config.cmake.in ${project_config}
+  INSTALL_DESTINATION ${config_install_dir}
+)
+
+write_basic_package_version_file(${project_version_config}
+  VERSION ${SPNG_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+install(
+  TARGETS ${spng_TARGETS}
+  EXPORT ${targets_export_name}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(FILES spng/spng.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(
+  FILES ${project_config} ${project_version_config}
+  DESTINATION ${config_install_dir}
+)
+
+install(
+  EXPORT ${targets_export_name}
+  NAMESPACE "spng::"
+  DESTINATION ${config_install_dir}
+)
+
+if(NOT CMAKE_HOST_WIN32 OR CYGWIN OR MINGW)
+    set(prefix      ${CMAKE_INSTALL_PREFIX})
+    set(exec_prefix ${CMAKE_INSTALL_PREFIX})
+    set(libdir      ${CMAKE_INSTALL_FULL_LIBDIR})
+    set(includedir  ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+    set(LIBS        "-lm")
+
+    foreach(libname ${spng_TARGETS})
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/libspng.pc.in ${CMAKE_CURRENT_BINARY_DIR}/cmake/lib${libname}.pc @ONLY)
+
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/lib${libname}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+    endforeach()
+endif()
