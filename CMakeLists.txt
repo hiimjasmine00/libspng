@@ -53,7 +53,6 @@ foreach(spng_TARGET ${spng_TARGETS})
       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
     target_link_libraries(${spng_TARGET} PRIVATE ${MATH_LIBRARY})
-    target_compile_definitions(${spng_TARGET} PRIVATE SPNG_USE_MINIZ)
 endforeach()
 
 set(project_config "${CMAKE_CURRENT_BINARY_DIR}/SPNGConfig.cmake")
